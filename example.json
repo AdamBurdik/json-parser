@@ -1,0 +1,17 @@
+{
+	"hello": "world",
+	"int": 69,
+	"array": [1, 2, 3],
+	"complex": {
+		"really": {
+			"nested": {
+				"stuff": []
+			}
+		}
+	},
+	"array_of_objects": [
+		{
+			"sub_array": ["hello", 1, 2]
+		}
+	]
+}
