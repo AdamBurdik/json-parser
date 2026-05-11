@@ -1,14 +1,11 @@
 use std::collections::HashMap;
-use std::{fs, result};
-use std::arch::naked_asm;
-use std::f32::consts::E;
-use std::fmt::format;
-use std::hash::Hash;
 use std::iter::Peekable;
 use std::num::ParseFloatError;
 use std::str::Chars;
+use std::fs;
 
 #[derive(Debug)]
+#[allow(dead_code)]
 enum JsonValue {
     Null,
     Bool(bool),
@@ -29,7 +26,7 @@ enum JsonValueType {
 }
 
 fn advance_chars(chars: &mut Peekable<Chars>, amount: usize) -> usize {
-    for i in 0..amount {
+    for _i in 0..amount {
         chars.next();
     }
     amount
@@ -77,7 +74,7 @@ fn determinate_value_type(input: &String, starting_index: usize) -> Option<(Json
             'n' => {
                 let mut expected = String::new();
                 expected.push('n');
-                for j in 0..3 {
+                for _j in 0..3 {
                     chars.next();
                     expected.push(*chars.peek().unwrap());
                 }
@@ -88,7 +85,7 @@ fn determinate_value_type(input: &String, starting_index: usize) -> Option<(Json
             't' => {
                 let mut expected = String::new();
                 expected.push('t');
-                for j in 0..3 {
+                for _j in 0..3 {
                     chars.next();
                     expected.push(*chars.peek().unwrap());
                 }
@@ -99,7 +96,7 @@ fn determinate_value_type(input: &String, starting_index: usize) -> Option<(Json
             'f' => {
                 let mut expected = String::new();
                 expected.push('f');
-                for j in 0..4 {
+                for _j in 0..4 {
                     chars.next();
                     expected.push(*chars.peek().unwrap());
                 }
@@ -119,15 +116,14 @@ fn determinate_value_type(input: &String, starting_index: usize) -> Option<(Json
 
 fn parse_bool(input: &String, starting_index: usize) -> Result<(bool, usize), String> {
     let mut chars = input.chars().peekable();
-    let mut result = String::new();
-    let mut i = advance_chars(&mut  chars, starting_index);
+    let i = advance_chars(&mut  chars, starting_index);
 
     let first = *chars.peek().unwrap();
     match first {
         't' => {
             let mut expected = String::new();
             expected.push('t');
-            for j in 0..3 {
+            for _j in 0..3 {
                 chars.next();
                 expected.push(*chars.peek().unwrap());
             }
@@ -140,7 +136,7 @@ fn parse_bool(input: &String, starting_index: usize) -> Result<(bool, usize), St
         'f' => {
             let mut expected = String::new();
             expected.push('f');
-            for j in 0..4 {
+            for _j in 0..4 {
                 chars.next();
                 expected.push(*chars.peek().unwrap());
             }
@@ -327,8 +323,6 @@ fn parse_array(input: &String, starting_index: usize) -> Result<(Vec<JsonValue>,
     let bytes = input.as_bytes();
     let mut i = starting_index + 1;
 
-    let mut map: Option<HashMap<String, JsonValue>> = None;
-    let mut current_key: Option<String> = None;
     let mut array: Vec<JsonValue> = Vec::new();
 
     while i < bytes.len() {
